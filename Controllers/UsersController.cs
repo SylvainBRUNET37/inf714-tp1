@@ -34,9 +34,17 @@ namespace INF714.Controllers
         [HttpPut("{userId}/items/{itemId}")]
         public async Task<ActionResult> PutItem(Guid userId, uint itemId, [Required] string name, [Required] uint amount)
         {
-            var inventory = _inventoryProvider.Put(userId, itemId, name, amount);
+            await _inventoryProvider.Put(userId, itemId, name, amount);
 
-            return Ok(inventory);
+            return Ok();
+        }
+
+        [HttpDelete("{userId}/items/{itemId}")]
+        public async Task<ActionResult> DeleteItem(Guid userId, uint itemId)
+        {
+            await _inventoryProvider.Delete(userId, itemId);
+
+            return Ok();
         }
 
         #endregion

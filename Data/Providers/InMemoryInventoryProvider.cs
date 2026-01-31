@@ -29,10 +29,7 @@ namespace INF714.Data.Providers
 
         public Task Put(Guid userId, uint itemId, string name, uint amount)
         {
-            if (!_items.ContainsKey(itemId))
-            {
-                throw new ArgumentException($"Item with ID {itemId} doesn't exist.");
-            }
+            ValidateItemId(itemId);
 
             if (amount == 0)
             {
@@ -49,6 +46,30 @@ namespace INF714.Data.Providers
             AddItem(userInventory, itemId, amount);
 
             return Task.CompletedTask;
+        }
+
+        public Task Delete(Guid userId, uint itemId)
+        {
+            ValidateItemId(itemId);
+
+            if (_inventories.TryGetValue(userId, out Inventory userInventory))
+            {
+                userInventory.Remove(itemId);
+            }
+            else
+            {
+                throw new ArgumentException($"User {userId} do not have item {itemId} in it's inventory.");
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private void ValidateItemId(uint itemId)
+        {
+            if (!_items.ContainsKey(itemId))
+            {
+                throw new ArgumentException($"Item with ID {itemId} doesn't exist.");
+            }
         }
 
         private void UpdateItemData(uint itemId, string name)

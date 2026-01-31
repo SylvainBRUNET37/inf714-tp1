@@ -10,6 +10,8 @@ namespace INF714.Data.Providers.Interfaces
     {
         Task<Inventory> Get(Guid userId);
 
-        Task Put(Guid userId, uint itemId, Item item);
+        Task Put(Guid userId, uint itemId, string name, uint amount);
+
+        Task Delete(Guid userId, uint itemId);
     }
 }
