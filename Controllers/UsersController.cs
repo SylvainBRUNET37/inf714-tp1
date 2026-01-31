@@ -11,14 +11,29 @@ namespace INF714.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUserProvider userProvider, IInventoryProvider inventoryProvider) : ControllerBase
     {
-        private IUserProvider _userProvider;
+        private readonly IUserProvider _userProvider = userProvider;
+        private readonly IInventoryProvider _inventoryProvider = inventoryProvider;
 
-        public UsersController(IUserProvider userProvider)
+        #region Inventory requests
+
+        [HttpGet("{userId}/items")]
+        public async Task<ActionResult> GetInventory(Guid userId)
         {
-            _userProvider = userProvider;
+            var user = await _userProvider.Get(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var inventory = await _inventoryProvider.Get(userId);
+            return Ok(inventory);
         }
+
+        #endregion
+
+        #region Core user requests
 
         [HttpPost]
         public async Task<ActionResult> Create()
@@ -32,12 +47,30 @@ namespace INF714.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult> Get(Guid userId)
         {
-            return Ok();
+            var user = await _userProvider.Get(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         [HttpPatch("{userId}")]
         public async Task<ActionResult> Update(Guid userId, string name, uint? level)
         {
+            var user = await _userProvider.Get(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (name != null)
+            {
+                user.Name = name;
+            }
+            if (level != null)
+            {
+                user.Level = level.GetValueOrDefault();
+            }
             return Ok();
         }
 
@@ -46,5 +79,7 @@ namespace INF714.Controllers
         {
             return Ok();
         }
+
+        #endregion
     }
 }

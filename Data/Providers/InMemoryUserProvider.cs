@@ -6,7 +6,7 @@ namespace INF714.Data.Providers
 {
     public class InMemoryUserProvider : Interfaces.IUserProvider
     {
-        Dictionary<Guid, User> _users = new Dictionary<Guid, User>();
+        private readonly Dictionary<Guid, User> _users = [];
 
         public InMemoryUserProvider()
         {
@@ -17,14 +17,14 @@ namespace INF714.Data.Providers
         {
             if(_users.ContainsKey(user.Id))
             {
-                throw new System.Exception("User already exists.");
+                throw new Exception("User already exists.");
             }
             _users.Add(user.Id, user);
         }
 
         public async Task<User> Get(Guid id)
         {
-            User user = new User();
+            User user = new();
             _users.TryGetValue(id, out user);
             return user;
         }

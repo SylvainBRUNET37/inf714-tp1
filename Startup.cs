@@ -34,6 +34,7 @@ namespace INF714
             services.AddControllers().AddNewtonsoftJson();
             services.AddHttpContextAccessor();
             services.AddSingleton<IUserProvider>(sp => new InMemoryUserProvider());
+            services.AddSingleton<IInventoryProvider>(sp => new InMemoryInventoryProvider());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
