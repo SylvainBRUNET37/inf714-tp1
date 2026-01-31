@@ -4,8 +4,12 @@ using System.Threading.Tasks;
 
 namespace INF714.Data.Providers.Interfaces
 {
+    using Inventory = Dictionary<uint, Item>;
+
     public interface IInventoryProvider
     {
-        Task<Dictionary<string, int>> Get(Guid userId);
+        Task<Inventory> Get(Guid userId);
+
+        Task Put(Guid userId, uint itemId, Item item);
     }
 }

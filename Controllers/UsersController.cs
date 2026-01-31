@@ -31,6 +31,14 @@ namespace INF714.Controllers
             return Ok(inventory);
         }
 
+        [HttpPut("{userId}/items/{itemId}")]
+        public async Task<ActionResult> PutItem(Guid userId, uint itemId, [Required] string name, [Required] uint amount)
+        {
+            var inventory = _inventoryProvider.Put(userId, itemId, name, amount);
+
+            return Ok(inventory);
+        }
+
         #endregion
 
         #region Core user requests
