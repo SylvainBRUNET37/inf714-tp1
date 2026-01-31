@@ -56,10 +56,6 @@ namespace INF714.Data.Providers
             {
                 userInventory.Remove(itemId);
             }
-            else
-            {
-                throw new ArgumentException($"User {userId} do not have item {itemId} in it's inventory.");
-            }
 
             return Task.CompletedTask;
         }
